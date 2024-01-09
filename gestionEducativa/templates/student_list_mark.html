@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container mt-3">
+        <h2>Lista de alumnos - <strong>{{ course }}</strong></h2>
+        {% if course.status == 'I' %}          
+            <h5><span class="badge bg-success">En etapa de inscripción</span></h5>
+        {% elif course.status == 'P' %}
+            <h5><span class="badge bg-warning text-dark">En progreso</span></h5>
+        {% elif course.status == 'F' %}
+            <h5><span class="badge bg-danger">Finalizado</span></h5>
+        {% endif %}
+        <table class="table">
+            <thead>
+                <tr>
+                <th scope="col">Alumno</th>
+                <th scope="col">Evaluación 1</th>
+                <th scope="col">Evaluación 2</th>
+                <th scope="col">Evaluación 3</th>
+                <th scope="col">Promedio</th>
+                <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in student_data %}
+                <tr>
+                <th scope="row">{{ data.name }}</th>
+                <td>{{ data.mark_1 }}</td>
+                <td>{{ data.mark_2 }}</td>
+                <td>{{ data.mark_3 }}</td>
+                <td><strong>{{ data.average }}</strong></td>
+                <td><a href="{% url 'update_mark' data.mark_id %}" class="btn btn.sm btn-primary{% if course.status == 'I' or course.status == 'F' %} disabled {% endif %}">Agregar Nota</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

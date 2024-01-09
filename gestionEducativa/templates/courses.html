@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="container my-4">
+        <div class="row">
+            <div class="col">
+                <h2>Nuestros Cursos</h2>
+            </div>
+            <div class="col">
+                <span class="float-end">
+                    {% if group_name == 'administrativos' %}
+                        <a class="btn btn-success" href="{% url 'courses_create' %}"> Agregar Curso</a>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+        <hr>
+       
+
+        <!-- seccion de mensajes -->
+        {% if messages %}
+            <div class="container mt-3">
+                {% for message in messages %}
+                    <div class="alert alert-success" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!---->
+
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 my-4">
+            {% for course in courses %}
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ course.name }}</h5>
+                        <p class="card-text">{{ course.description }}</p>
+                        <p class="card-text"><strong>Profesor: </strong>{{ course.teacher.first_name }} {{ course.teacher.last_name }}</p>
+                        <p class="card-text"><strong>Cantidad de Clases: </strong>{{ course.class_quantity }}</p>
+                        <p class="card-text"><strong>Cantidad de inscriptos: </strong>{{ course.enrollement_count }}</p>
+
+                        {% if course.status == "F" %}
+                        <h5><span class="badge bg-danger w-100">{{ course.get_status_display.upper }}</span></h5>
+
+                        {% elif course.status == "P" %}
+                        <h5><span class="badge bg-warning text-dark w-100">{{ course.get_status_display.upper }}</span></h5>
+                            {% if course.is_enrolled %}
+                            <a href="{% url 'profile' %}" class="btn btn-sm btn-warning">Ir al perfil</a>    
+                            {% endif %}
+
+                        {% elif course.status == "I" %}
+                        <h5><span class="badge bg-success w-100">{{ course.get_status_display.upper }}</span></h5>
+
+                            {% if group_name == 'estudiantes' and not course.is_enrolled %}
+                            <a href="{% url 'enroll_course' course.id %}" class="btn btn-sm btn-success">Anotarse</a> 
+
+                            {% elif course.is_enrolled %}
+                            <a href="{% url 'profile' %}" class="btn btn-sm btn-warning">Ir al perfil</a>                     
+
+                            {% endif %}
+                        {% endif %}                        
+                        
+                        {% if group_name == 'administrativos' %}
+                            <a href="{% url 'course_edit' course.id %}" class="btn btn-sm btn-warning">Editar</a> 
+                            <a href="{% url 'course_delete' course.id %}" class="btn btn-sm btn-danger">Eliminar</a> 
+                        {% endif %}
+
+                       
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+
+    </div>
+
+{% endblock %}

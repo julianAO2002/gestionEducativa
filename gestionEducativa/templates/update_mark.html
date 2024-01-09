@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container mt-3">
+        <h2>Curso - <strong>{{ course_name }}</strong></h2>
+        <h2>Actualizar Notas - {{ object.student.get_full_name }}</h2>
+
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-primary" type="submit">Guardar cambios</button>
+            <button class="btn btn-secondary" type="button" onclick="goBack()">Volver</button>
+        </form>
+
+        <script>
+            function goBack(){
+                window.history.back();
+            }
+        </script>
+
+    </div>
+{% endblock %}

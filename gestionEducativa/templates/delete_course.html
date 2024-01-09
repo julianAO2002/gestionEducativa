@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% load crispy_forms_tags %}
+    <div class="container my-4">
+        <h2>Borrar cursos</h2>
+            <form action="" method="post">
+            {% csrf_token %}
+            <div class="card w-50 mx-auto my-5 ">
+                <div class="card-body">
+                    <h5 class="card-title">Eliminacion de curso irreversible</h5>
+                    <p>¿Estas seguro que deseas eliminar el curso <strong>{{ course.name }}</strong>?</p>
+                    <div class="float-end">
+                        <a type="button" href="" data-bs-toggle="modal"
+                        data-bs-target="#deleteModal" class="btn btn-danger mt-auto">Eliminar</a>
+                        <a href="{% url 'courses' %}" class="btn btn-secondary mt-auto">Cancelar</a>
+                    </div>
+                    
+                   
+                </div>
+            </div>
+
+            <!-- MODAL PARA COMFIRMAR LA ELIMINACION -->
+            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">                    
+                        <div class="modal-header">
+                            <h5 class="modal-title"id="deleteModalLabel">Confirmar la eliminiación</h5>
+                            <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="close"></button>
+                        </div>
+                        <div class="modal-body">
+                            ¿Estas seguro que deseas eliminar el curso? (Este accion no se puede deshacer)
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button class="btn btn-danger" type="submit">Eliminar Curso</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+{% endblock %}

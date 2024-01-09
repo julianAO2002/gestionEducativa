@@ -1,0 +1,34 @@
+
+    <h5>CURSOS</h5>
+    {% if assigned_courses %}
+
+        <ul class="list-group">
+            {% for course in assigned_courses %}
+                {% with enrollment_count=course.registration_set.count %}                
+                    {% if course.status == 'I' %}
+                        <li class="list-group-item list-group-item-success">
+                    {% elif course.status == 'P' %}
+                        <li class="list-group-item list-group-item-warning">
+                    {% elif course.status == 'F' %}
+                        <li class="list-group-item list-group-item-danger">
+                    {% endif %}
+
+                    {{ course.name }} {{ course.status }}
+                        <a href='{% url "student_list_mark" course.id %}' class="btn btn-sm btn-warning float-end">
+                            {% if course.status == 'I' or course.status == 'F' %}
+                                Consultar Lista
+                            {% elif course.status == 'P' %}
+                                Agregar Notas
+                            {% endif %}
+                            <span class="badge rounded-pill bg-light text-danger">{{ enrollment_count }}</span>
+                        </a>
+                    </li>
+                {% endwith %}    
+            {% endfor %}
+        </ul>
+     
+    {% else %}
+        <div class="alert alert-primary" role="alert">
+            Usted no tiene cursos asignados.
+        </div>
+    {% endif %}

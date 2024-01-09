@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container my-3">
+        <div class="row">
+            <div class="col-md-4">
+                <!-- CARD DATOS DE PERFIL -->
+                <div class="card border rounded-2 shadow p-3 mb-3">
+                    <div class="card-body">
+                        <img class="img-thumbnail rounded-circle mb-3" src="{{ user.profile.image.url }}" alt="{{ user.username }}" style="width: 100px;">
+                        <h2>{{ user.first_name }} {{ user.last_name }}</h2>
+                        <h4><span class="badge {{ color }}">{{ group_name_singular | capfirst }}</span></h4>
+                        <hr>
+                        <p><strong>Nombre de usuario: </strong>{{ user.username}}</p>
+                        <p><strong>Domicilio: </strong>{{ user.profile.address }} </p>
+                        <p><strong>Localidad: </strong>{{ user.profile.location }} </p>
+                        <p><strong>Teléfono:  </strong>{{ user.profile.telephone }}</p>
+                        <p><strong>Correo electrónico:  </strong>{{ user.email }}</p>
+                        <hr>
+                        
+
+                        {% if request.user.username == 'admin'  %}
+                            <a class="btn btn-warning w-100 mb-1" href="{% url 'admin:index' %}">Ir al Admin</a>
+                        {% endif %}
+
+                        <button type="button" class="btn btn-outline-secondary w-100 mb-1" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                            Editar Perfil
+                        </button>
+                        <a class="btn btn-danger w-100" href="{% url 'logout' %}">Cerrar sesión</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <!-- CARD VARIABLE -->
+                <div class="card border rounded-2 shadow p-3 mb-3">
+                    <div class="card-body">
+                        <!-- evaluar grupo al que pertenece el usuario -->
+                        {% if group_name == 'estudiantes' %}
+                            {% include 'profile/student.html' %}
+                        {% elif group_name == 'profesores' %}
+                            {% include 'profile/profesor.html' %}
+                        {% elif group_name == 'preceptores' %}
+                            {% include 'profile/preceptor.html' %}
+                        {% elif group_name == 'administrativos' %}
+                            {% include 'profile/admin.html' %}
+                        {% endif %}
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vertically centered modal -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editProfileModalLabel">Editar Perfil</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="d-flex">
+                            <img class="mx-auto img-thumbnail rounded-circle mb-3" src="{{ user.profile.image.url }}" alt="{{ user.username }}" style="width: 100px;">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="image">Imagen de perfil</label>
+                            <input class="form-control" type="file" name="image" id="image">
+                        </div>
+
+                        <div class="d-flex">
+                            <div class="mb-3 mr-2">
+                                <label for="first_name">Nombre</label>
+                                <input type="text" class="form-control" name="first_name" value="{{ user.first_name }}">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="last_name">Apellido</label>
+                                <input type="text" class="form-control" name="last_name" value="{{ user.last_name }}">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="address">Dirección</label>
+                            <input type="text" class="form-control" name="address" value="{{ user.profile.address }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="location">Localidad</label>
+                            <input type="text" class="form-control" name="location" value="{{ user.profile.location }}">
+                        </div>
+
+                        <div class="d-flex">
+                            <div class="mb-3 mr-2">
+                                <label for="telephone">Teléfono</label>
+                                <input type="text" class="form-control" name="telephone" value="{{ user.profile.telephone }}">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="email">Email</label>
+                                <input type="text" class="form-control" name="email" value="{{ user.email }}" disabled>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                    </div>
+                </form>
+            </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+

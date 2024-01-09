@@ -1,0 +1,59 @@
+{% if user.is_authenticated %}
+    {% if group_name == 'estudiantes' %}
+        <header class="p-3 text-bg-dark bg-primary">
+    {% elif group_name == 'profesores' %}
+        <header class="p-3 text-bg-dark bg-success">
+    {% elif group_name == 'preceptores' %}
+        <header class="p-3 text-bg-dark bg-secondary">
+    {% elif group_name == 'administrativos' %}
+        <header class="p-3 text-bg-dark bg-danger">
+    {% endif %}
+{% else %}
+    <header class="p-3 text-bg-dark bg-primary">
+{% endif %}
+<div class="container">
+    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <a href="{% url 'home' %}" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+            ACADEMIA
+        </a>
+
+        {% if user.is_authenticated %}
+            {% if group_name == 'estudiantes' %}
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 bg-primary">
+            {% elif group_name == 'profesores' %}
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 bg-success">
+            {% elif group_name == 'preceptores' %}
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 bg-secondary">
+            {% elif group_name == 'administrativos' %}
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 bg-danger">
+            {% endif %}
+        {% else %}
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 bg-primary">
+        {% endif %}
+
+
+        <li><a href="{% url 'home' %}" class="nav-link px-2 text-white">Inicio</a></li>
+        <li><a href="{% url 'courses' %}" class="nav-link px-2 text-white">Cursos</a></li>
+
+
+        {% if not user.is_authenticated or group_name == 'estudiantes' %}
+            <li><a href="{% url 'pricing' %}" class="nav-link px-2 text-white">Precios</a></li>
+            <li><a href="#" class="nav-link px-2 text-white">Preguntas y Respuestas</a></li>
+            <li><a href="#" class="nav-link px-2 text-white">Acerca de</a></li>
+        {% endif %}
+        </ul>
+
+        <div class="text-end">
+            {% if user.is_authenticated %}
+                <li style="list-style-type: none;">
+                    <a class="nav-link px-2 text-white" href="{% url 'profile' %}">{{ group_name_singular|capfirst }}
+                        | {{ user.username }}</a>
+                </li>
+            {% else %}
+                <a class="btn btn-outline-light me-2" href="{% url 'login' %}">Iniciar Sesión</a>
+                <a class="btn btn-warning" href="{% url 'register' %}">Registrarse</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+</header>
